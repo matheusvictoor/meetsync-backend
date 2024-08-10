@@ -1,0 +1,39 @@
+# utiliza uma imagem com index digest e eh dado o alias de 'build'
+FROM sha256:eb8101caae9ac02229bd64c024919fe3d4504ff7f329da79ca60a04db08cef52 AS build
+
+# define o diretorio app como o diretorio de trabalho
+WORKDIR /usr/src/app
+
+# copia os arquivos com o padrao abaixo para a pasta app
+COPY package-*.json /usr/src/app
+
+# executa o comando npm ci para facilitar as dependencias de producao
+# usa o recurso de 'build secrets' do Docker para montar um arquivo '.npmrc' como um segredo durante o build
+RUN --mount=type=secret, id=npmrc,target=/usr/src/app/.npmrc npm ci --only=production
+
+# usa a versao leve e de longo suporte lts baseada na distribuicao alpine linux que eh menor e otimizada para producao
+FROM node:lts-alpine
+
+# um inicializador de processos que troca pid do processo de 1 para outro valor para o processo nao ter tratamento
+# de processo do tipo init
+RUN apk add dumb-init
+
+# define a variavel de ambiente como de production para otimizar a aplicacao em ambiente de producao
+ENV NODE_ENV production
+
+# define o usuario do container como o nome node, que eh um usuario com poucos privilegios, usado para melhorar a seguranca
+USER node
+
+# define o diretorio app como diretorio de trabalho
+WORKDIR /usr/src/app
+
+# copia o diretorio node_modules de build para o estagio de producao, para garantir que as dependencias de producao
+# estejam disponiveis
+# o comando --chown.. muda o dono dos arquivos para o usuario 'node'
+COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/app/node_modules
+
+# copia o restante dos arquivos da aplicacao para o container, definindo o proprietario como node
+COPY --chown=node:node . /usr/src/app
+
+#j define o comando padrao que sera executado quando o container iniciar
+CMD [ "dumb-init", "node", "src/server.js" ]
