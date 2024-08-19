@@ -1,0 +1,63 @@
+// arquivo para configuracao como banco de dados
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId    String      @id @default(uuid())
+  name      String
+  email     String      @unique
+  password  String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  Vote      Vote[]
+  User_Room User_Room[]
+}
+
+model Room {
+  roomId    String      @id @default(uuid())
+  link      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  Time      Time[]
+  User_Room User_Room[]
+}
+
+model Time {
+  timeId String   @id @default(uuid())
+  date   DateTime
+  start  DateTime
+  end    DateTime
+  roomId String
+
+  room Room   @relation(fields: [roomId], references: [roomId])
+  Vote Vote[]
+}
+
+model Vote {
+  voteId    String   @id @default(uuid())
+  createdAt DateTime
+  userId    String
+  timeId    String
+
+  user User @relation(fields: [userId], references: [userId])
+  time Time @relation(fields: [timeId], references: [timeId])
+}
+
+model User_Room {
+  userId String
+  roomId String
+
+  user User @relation(fields: [userId], references: [userId])
+  room Room @relation(fields: [roomId], references: [roomId])
+
+  @@id([userId, roomId])
+}
