@@ -5,7 +5,7 @@ class RoomRepository {
   async createRoom(room: Room) {
     return await prisma.room.create({
       data: { 
-        link: room.link
+        link: room.link || ""
       },
     });
   }

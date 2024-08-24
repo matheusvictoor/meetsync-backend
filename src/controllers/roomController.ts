@@ -9,17 +9,11 @@ class RoomController{
     this.roomService = new RoomService();
   }
 
-  getRooms = async (req: Request, res: Response) => {
-      res.status(200).json({
-        message : 'Hello Worlds!'
-      });      
-  };
-
   async createRoom (req: Request, res: Response) {
-    const { link } = req.body;
+    const { link, times } = req.body;
 
     try {
-      const room = await this.roomService.createRoom(link);
+      const room = await this.roomService.createRoom(link, times);
       res.status(201).json(room);
     } catch (error : any) {
       res.status(400).json({ error: error.message });

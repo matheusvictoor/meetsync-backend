@@ -13,6 +13,20 @@ class TimeService {
 
     return await this.timeRepository.createTime(time);
   }
+
+  async createTimesForRoom(roomId: string, times: { date: string; start: string; end: string }[]) {
+    const timePromises = times.map((time) => {
+      const newTime = new Time(
+        new Date(time.date), 
+        new Date(time.start), 
+        new Date(time.end), 
+        roomId
+      );
+      return this.timeRepository.createTime(newTime);
+    });
+
+    return Promise.all(timePromises);
+  }
 }
 
 export default TimeService;
