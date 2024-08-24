@@ -8,7 +8,7 @@ class UserService {
     this.userRepository = new UserRepository();
   }
 
-  async createrUser(name: string, email?: string, password?: string) {
+  async createUser(name: string, email?: string, password?: string) {
     const user = new User(name, email, password);
 
     return await this.userRepository.createUser(user);

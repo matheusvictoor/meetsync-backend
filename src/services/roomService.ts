@@ -8,7 +8,7 @@ class RoomService {
     this.roomRepository = new RoomRepository();
   }
 
-  async createrRoom(link: string) {
+  async createRoom(link: string) {
     const room = new Room(link);
 
     return await this.roomRepository.createRoom(room);

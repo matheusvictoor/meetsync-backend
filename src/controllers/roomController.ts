@@ -19,7 +19,7 @@ class RoomController{
     const { link } = req.body;
 
     try {
-      const room = await this.roomService.createrRoom(link);
+      const room = await this.roomService.createRoom(link);
       res.status(201).json(room);
     } catch (error : any) {
       res.status(400).json({ error: error.message });
