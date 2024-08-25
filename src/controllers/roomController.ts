@@ -9,6 +9,17 @@ class RoomController{
     this.roomService = new RoomService();
   }
 
+  async getRoom (req: Request, res: Response) {
+    const { roomId } = req.params;
+
+    try {
+      const room = await this.roomService.getRoom(roomId);
+      res.status(200).json(room);
+    } catch (error : any) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
   async createRoom (req: Request, res: Response) {
     const { link, times } = req.body;
 
