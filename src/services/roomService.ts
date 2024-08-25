@@ -23,8 +23,11 @@ class RoomService {
       );
     });
 
-    const response = await this.roomRepository.createRoom(room, timeObjects);
-    return response;
+    return await this.roomRepository.createRoom(room, timeObjects);
+  }
+
+  async deleteRoom(roomId: string) {
+    await this.roomRepository.deleteRoom(roomId);
   }
 }
 
