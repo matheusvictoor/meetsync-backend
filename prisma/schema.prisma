@@ -38,7 +38,7 @@ model Time {
   end    DateTime
   roomId String
 
-  room Room   @relation(fields: [roomId], references: [roomId])
+  room Room   @relation(fields: [roomId], references: [roomId], onDelete: Cascade)
   Vote Vote[]
 }
 

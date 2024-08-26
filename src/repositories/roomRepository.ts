@@ -31,6 +31,14 @@ class RoomRepository {
       }
     });
   }
+
+  async deleteRoom(roomId: string) {
+    return await prisma.room.delete({
+      where: {
+        roomId: roomId,
+      }
+    });
+  }
 }
 
 export default RoomRepository;

@@ -30,6 +30,17 @@ class RoomController{
       res.status(400).json({ error: error.message });
     }
   };
+
+  async deleteRoom (req: Request, res: Response) {
+    const { roomId } = req.params;
+
+    try {
+      await this.roomService.deleteRoom(roomId);
+      res.status(204).send();
+    } catch (error : any) {
+      res.status(404).json({ error: error.message });
+    }
+  };
 }
 
 export default new RoomController();
