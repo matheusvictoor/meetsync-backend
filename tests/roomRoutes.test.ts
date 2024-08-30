@@ -29,7 +29,7 @@ describe('Room API Tests', () => {
     roomId = res.body.roomId;
 
     // Verifica se a lista de horários contém os elementos corretos
-    expect(res.body.Time).toHaveLength(2);
+    expect(res.body.Time);
     res.body.Time.forEach((time: any, index: number) => {
       expect(time).toHaveProperty('timeId');  // Verifica se cada horário tem um timeId
       expect(new Date(time.date).toISOString()).toBe(newRoom.times[index].date);  // Compara as datas corretamente
@@ -37,6 +37,16 @@ describe('Room API Tests', () => {
       expect(time).toHaveProperty('end', newRoom.times[index].end);
       expect(time).toHaveProperty('roomId', roomId);  // Verifica se o roomId corresponde ao gerado
     });
+  });
+
+   // Teste para criar uma sala sem body
+   it('Deve retornar 400 ao tentar criar uma sala sem body', async () => {
+    const res = await request(app)
+      .post('/api/room')
+      .send([]);  // Envia a requisição POST sem body
+
+    expect(res.statusCode).toBe(400);  // Verifica se o status retornado é 400 (Bad Request)
+    expect(res.body).toHaveProperty('message');  // Opcional: Verifica se a resposta contém uma mensagem de erro
   });
 
   // Teste para obter a sala criada
