@@ -9,7 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+ model User {
   userId    String      @id @default(uuid())
   name      String
   email     String      @unique
@@ -17,7 +17,7 @@ model User {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
-  Vote      Vote[]
+  //Vote      Vote[]
   User_Room User_Room[]
 }
 
@@ -44,11 +44,12 @@ model Time {
 
 model Vote {
   voteId    String   @id @default(uuid())
-  createdAt DateTime
-  userId    String
+  createdAt DateTime @default(now())
+  userName  String
   timeId    String
 
-  user User @relation(fields: [userId], references: [userId])
+  @@unique([userName, timeId]) 
+  //user User @relation(fields: [userId], references: [userId])
   time Time @relation(fields: [timeId], references: [timeId])
 }
 

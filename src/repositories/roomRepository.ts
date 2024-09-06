@@ -9,8 +9,12 @@ class RoomRepository {
         roomId: roomId,
       },
       include: {
-        Time: true,  
-      }
+        Time: {
+          include: {
+            Vote: true,
+          },
+        },
+      },
     });
   }
 
