@@ -21,7 +21,7 @@ class RoomRepository {
   async createRoom(room: Room, times: Time[]) {
     return await prisma.room.create({
       data: {
-        link: room.link || "",
+        endingAt: room.endingAt,
         Time: {
           create: times.map(time => ({
             date: time.date,

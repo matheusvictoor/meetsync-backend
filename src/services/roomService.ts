@@ -13,8 +13,10 @@ class RoomService {
     return await this.roomRepository.getRoom(roomId);
   }
 
-  async createRoom(link: string, times: { date: string; start: string; end: string }[]) {
-    const room = new Room(link);
+  async createRoom(endingAt: string, times: { date: string; start: string; end: string }[]) {
+    const room = new Room( 
+      new Date(endingAt)
+    );
     const timeObjects = times.map((time) => {
       return new Time(
         new Date(time.date), 
