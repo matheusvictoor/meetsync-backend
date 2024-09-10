@@ -43,6 +43,19 @@ class RoomRepository {
       }
     });
   }
+
+  async getRoomByTimeId(timeId: string) {
+    const timeWithRoom = await prisma.time.findUnique({
+      where: {
+        timeId: timeId,
+      },
+      include: {
+        room: true,  
+      },
+    });
+
+    return timeWithRoom?.room || null;  
+  }
 }
 
 export default RoomRepository;
