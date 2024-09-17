@@ -21,13 +21,24 @@ class RoomController{
   };
 
   async createRoom (req: Request, res: Response) {
-    const { link, times } = req.body;
+    const { endingAt, times } = req.body;
 
     try {
-      const room = await this.roomService.createRoom(link, times);
+      const room = await this.roomService.createRoom(endingAt, times);
       res.status(201).json(room);
     } catch (error : any) {
       res.status(400).json({ error: error.message });
+    }
+  };
+
+  async deleteRoom (req: Request, res: Response) {
+    const { roomId } = req.params;
+
+    try {
+      await this.roomService.deleteRoom(roomId);
+      res.status(204).send();
+    } catch (error : any) {
+      res.status(404).json({ error: error.message });
     }
   };
 }

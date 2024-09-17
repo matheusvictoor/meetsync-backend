@@ -9,15 +9,19 @@ class RoomRepository {
         roomId: roomId,
       },
       include: {
-        Time: true,  
-      }
+        Time: {
+          include: {
+            Vote: true,
+          },
+        },
+      },
     });
   }
 
   async createRoom(room: Room, times: Time[]) {
     return await prisma.room.create({
       data: {
-        link: room.link || "",
+        endingAt: room.endingAt,
         Time: {
           create: times.map(time => ({
             date: time.date,
@@ -30,6 +34,27 @@ class RoomRepository {
         Time: true,  
       }
     });
+  }
+
+  async deleteRoom(roomId: string) {
+    return await prisma.room.delete({
+      where: {
+        roomId: roomId,
+      }
+    });
+  }
+
+  async getRoomByTimeId(timeId: string) {
+    const timeWithRoom = await prisma.time.findUnique({
+      where: {
+        timeId: timeId,
+      },
+      include: {
+        room: true,  
+      },
+    });
+
+    return timeWithRoom?.room || null;  
   }
 }
 
