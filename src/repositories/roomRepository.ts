@@ -21,7 +21,7 @@ class RoomRepository {
   async createRoom(room: Room, times: Time[]) {
     return await prisma.room.create({
       data: {
-        link: room.link || "",
+        endingAt: room.endingAt,
         Time: {
           create: times.map(time => ({
             date: time.date,
@@ -42,6 +42,19 @@ class RoomRepository {
         roomId: roomId,
       }
     });
+  }
+
+  async getRoomByTimeId(timeId: string) {
+    const timeWithRoom = await prisma.time.findUnique({
+      where: {
+        timeId: timeId,
+      },
+      include: {
+        room: true,  
+      },
+    });
+
+    return timeWithRoom?.room || null;  
   }
 }
 

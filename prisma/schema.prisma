@@ -23,7 +23,7 @@ datasource db {
 
 model Room {
   roomId    String      @id @default(uuid())
-  link      String
+  endingAt  DateTime
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
@@ -50,7 +50,7 @@ model Vote {
 
   @@unique([userName, timeId]) 
   //user User @relation(fields: [userId], references: [userId])
-  time Time @relation(fields: [timeId], references: [timeId])
+  time Time @relation(fields: [timeId], references: [timeId], onDelete: Cascade)
 }
 
 model User_Room {

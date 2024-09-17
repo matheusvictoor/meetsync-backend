@@ -1,7 +1,7 @@
 export class Room {
-  link: string;
+  endingAt: Date;
 
-  constructor(link: string) {
-    this.link = link;
+  constructor(endingAt: Date) {
+    this.endingAt = endingAt;
   }
 }
