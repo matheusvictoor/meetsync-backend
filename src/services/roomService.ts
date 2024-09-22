@@ -60,9 +60,9 @@ class RoomService {
     return mostVoted;
   }
 
-  async createRoom(endingAt: string, times: { date: string; start: string; end: string }[]) {
+  async createRoom(endingAt: Date, times: { date: Date; start: Date; end: Date }[]) {
     const room = new Room( 
-      new Date(endingAt)
+      endingAt
     );
     const timeObjects = times.map((time) => {
       return new Time(

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import VoteService from '../services/voteService';
+import { voteSchema } from '../utils/validSchema';
 
 class VoteController{
 
@@ -10,7 +11,8 @@ class VoteController{
   }
 
   async createVotes (req: Request, res: Response) {
-    const { userName, times } = req.body;
+    const voteData = voteSchema.parse(req.body);
+    const { userName, times } = voteData;
 
     const votes = await this.voteService.createVotes(userName, times);
 

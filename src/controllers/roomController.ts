@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import RoomService from '../services/roomService';
+import { roomSchema } from '../utils/validSchema';
 
 class RoomController{
 
@@ -20,7 +21,8 @@ class RoomController{
   };
 
   async createRoom (req: Request, res: Response) {
-    const { endingAt, times } = req.body;
+    const roomData = roomSchema.parse(req.body);
+    const { endingAt, times } = roomData;
     const room = await this.roomService.createRoom(endingAt, times);
 
     if(room.isFailure)
