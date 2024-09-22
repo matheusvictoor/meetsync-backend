@@ -6,6 +6,8 @@ services:
     container_name: container_app
     ports:
       - "3000:3000"
+    depends_on:
+      - postgres
     environment:
       NODE_ENV: development
     volumes:
