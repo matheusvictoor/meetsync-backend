@@ -2,13 +2,14 @@ import { Room } from '../models/room';
 import { Time } from '../models/time';
 import { Vote } from '../models/vote';
 import RoomRepository from '../repositories/roomRepository';
+import { Result } from '../utils/result';
 
 type Report = {
   times: (Time & { timeId: string })[];  
   numVotes: number;
 }
 
-interface RoomResponse extends Room {
+export interface RoomResponse extends Room {
   Time: (Time & {
     timeId: string;
     Vote: Vote[];
@@ -22,18 +23,20 @@ class RoomService {
     this.roomRepository = new RoomRepository();
   }
 
-  async getRoom(roomId: string): Promise<RoomResponse | Report> {
-    const room: RoomResponse | null = await this.roomRepository.getRoom(roomId);
+  async getRoom(roomId: string): Promise<Result<RoomResponse | Report>> {
+    const roomData = await this.roomRepository.getRoom(roomId);
 
-    if (!room) {
-        throw new Error('Sala indefinida');
+    if (roomData.isFailure) {
+        return Result.fail(roomData.error!);
     }
+
+    const room = roomData.getValue();
 
     const now = new Date();
     if (room.endingAt < now) {
-        return this.generateReport(room);
+        return Result.ok(this.generateReport(room));
     }
-    return room;
+    return Result.ok(room);
   }
 
   generateReport(room: RoomResponse): Report {
@@ -57,9 +60,9 @@ class RoomService {
     return mostVoted;
   }
 
-  async createRoom(endingAt: string, times: { date: string; start: string; end: string }[]) {
+  async createRoom(endingAt: Date, times: { date: Date; start: Date; end: Date }[]) {
     const room = new Room( 
-      new Date(endingAt)
+      endingAt
     );
     const timeObjects = times.map((time) => {
       return new Time(
@@ -72,8 +75,8 @@ class RoomService {
     return await this.roomRepository.createRoom(room, timeObjects);
   }
 
-  async deleteRoom(roomId: string) {
-    await this.roomRepository.deleteRoom(roomId);
+  async deleteRoom(roomId: string): Promise<Result<void>> {
+    return await this.roomRepository.deleteRoom(roomId);
   }
 }
 

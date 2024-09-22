@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import RoomService from '../services/roomService';
+import { roomSchema } from '../utils/validSchema';
 
 class RoomController{
 
@@ -11,35 +12,33 @@ class RoomController{
 
   async getRoom (req: Request, res: Response) {
     const { roomId } = req.params;
+    const room = await this.roomService.getRoom(roomId);
 
-    try {
-      const room = await this.roomService.getRoom(roomId);
-      res.status(200).json(room);
-    } catch (error : any) {
-      res.status(400).json({ error: error.message });
-    }
+    if(room.isFailure)
+      return res.status(400).json({ error: room.error?.message });
+
+    res.status(200).json(room.getValue());
   };
 
   async createRoom (req: Request, res: Response) {
-    const { endingAt, times } = req.body;
+    const roomData = roomSchema.parse(req.body);
+    const { endingAt, times } = roomData;
+    const room = await this.roomService.createRoom(endingAt, times);
 
-    try {
-      const room = await this.roomService.createRoom(endingAt, times);
-      res.status(201).json(room);
-    } catch (error : any) {
-      res.status(400).json({ error: error.message });
-    }
+    if(room.isFailure)
+      return res.status(400).json({ error: room.error?.message });
+
+    res.status(201).json(room.getValue());  
   };
 
   async deleteRoom (req: Request, res: Response) {
     const { roomId } = req.params;
+    const room = await this.roomService.deleteRoom(roomId);
 
-    try {
-      await this.roomService.deleteRoom(roomId);
-      res.status(204).send();
-    } catch (error : any) {
-      res.status(404).json({ error: error.message });
-    }
+    if(room.isFailure)
+      return res.status(404).json({ error: room.error?.message });
+
+    res.status(204).send();
   };
 }
 

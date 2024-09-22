@@ -1,7 +1,7 @@
-import { Room } from '../models/room';
 import { Vote } from '../models/vote';
 import RoomRepository from '../repositories/roomRepository';
 import VoteRepository from '../repositories/voteRepository';
+import { Result } from '../utils/result';
 
 class VoteService {
   private voteRepository;
@@ -13,15 +13,17 @@ class VoteService {
   }
 
   async createVotes(userName: string, times: string[]) {
-    const room = await this.roomRepository.getRoomByTimeId(times[0]);
+    const roomData = await this.roomRepository.getRoomByTimeId(times[0]);
 
-    if (!room) {
-      throw new Error('Sala indefinida');
+    if (roomData.isFailure) {
+      return Result.fail(new Error('Sala indefinida'));
     }
+    
+    const room = roomData.getValue();
 
     const now = new Date();
     if (room.endingAt < now) {
-      throw new Error('Tempo de votação encerrado');
+      return Result.fail(new Error('Tempo de votação encerrado'));
     }
 
     const voteObjects = times.map((timeId) => {
