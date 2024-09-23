@@ -7,12 +7,12 @@ export const userSchema = z.object({
 });
 
 export const roomSchema = z.object({
-  endingAt: z.date(),
+  endingAt: z.string().datetime(),
   times: z.array(z.object({
-    date: z.date(),
-    start: z.date(),
-    end: z.date()
-  })).min(1, 'É necessário pelo menos um horário')
+    date: z.string().datetime(),
+    start: z.string().datetime(),
+    end: z.string().datetime()
+  }))
 });
 
 export const voteSchema = z.object({
