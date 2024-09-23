@@ -31,11 +31,13 @@ class RoomRepository {
         data: {
           endingAt: room.endingAt,
           Time: {
-            create: times.map(time => ({
-              date: time.date,
-              start: time.start,
-              end: time.end
-            }))
+            createMany: {
+              data: times.map(time => ({
+                date: time.date,
+                start: time.start,
+                end: time.end
+              }))
+            }
           }
         },
         include: {
