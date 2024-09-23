@@ -6,15 +6,12 @@ class VoteRepository {
 
   async createVotes(votes: Vote[]) {
     try {
-      const votesData = await Promise.all(votes.map((vote) => {
-        return prisma.vote.create({
-          data: {
-            userName: vote.userName,
-            timeId: vote.timeId
-            }
-          });
-        })
-      );
+      const votesData = await prisma.vote.createMany({
+        data: votes.map((vote) => ({
+          userName: vote.userName,
+          timeId: vote.timeId
+        }))
+      });
       return Result.ok(votesData);
     } catch (error) {
       return Result.fail(new Error('Erro ao criar um voto'));
