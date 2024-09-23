@@ -3,6 +3,7 @@ import userRoutes from "./routes/userRoutes";
 import roomRoutes from "./routes/roomRoutes";
 import voteRoutes from "./routes/voteRoutes";
 import { errorMiddleware } from "./middlewares/error";
+import 'express-async-errors'
 
 const app = express();
 
@@ -13,7 +14,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/room', roomRoutes);
 
 app.use('/api/vote', voteRoutes);
-
 
 app.use(errorMiddleware);
 
