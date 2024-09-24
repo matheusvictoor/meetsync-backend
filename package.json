@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.ts",
   "scripts": {
-    "dev": "nodemon --watch --exec npx ts-node src/server.ts",
+    "dev": "nodemon --watch src --exec \"npx ts-node src/server.ts\"",
     "start": "nodemon ./dist/server.js",
     "build": "tsc",
     "postbuild": "prisma migrate deploy"

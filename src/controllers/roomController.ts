@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request, Response } from 'express';
 import RoomService from '../services/roomService';
 import { roomSchema } from '../utils/validSchema';
 
@@ -22,8 +22,8 @@ class RoomController{
 
   async createRoom (req: Request, res: Response) {
     const roomData = roomSchema.parse(req.body);
-    const { endingAt, times } = roomData;
-    const room = await this.roomService.createRoom(endingAt, times);
+    const { endingAt, title, description, times } = roomData;
+    const room = await this.roomService.createRoom(endingAt, title, times, description);
 
     if(room.isFailure)
       return res.status(400).json({ error: room.error?.message });

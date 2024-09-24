@@ -60,9 +60,21 @@ class RoomService {
     return mostVoted;
   }
 
-  async createRoom(endingAt: string, times: { date: string; start: string; end: string }[]) {
+  async createRoom(endingAt: string, title: string, times: { date: string; start: string; end: string }[], description?: string) {
+    if (!endingAt) {
+      return Result.fail(new Error('A data de término é obrigatória.'));
+    }
+    if (!title) {
+      return Result.fail(new Error('O título é obrigatório.'));
+    }
+    if (!times || times.length === 0) {
+      return Result.fail(new Error('É necessário informar pelo menos um horário.'));
+    }
+    
     const room = new Room( 
-      new Date(endingAt)
+      new Date(endingAt),
+      title,
+      description
     );
     const timeObjects = times.map((time) => {
       return new Time(

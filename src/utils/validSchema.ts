@@ -7,12 +7,14 @@ export const userSchema = z.object({
 });
 
 export const roomSchema = z.object({
-  endingAt: z.string().datetime(),
+  endingAt: z.string().datetime({ message: 'A data de término é obrigatória e deve estar no formato correto.' }),
+  title: z.string().min(1, 'O título é obrigatório'),
+  description: z.string().optional(), 
   times: z.array(z.object({
     date: z.string().datetime(),
     start: z.string().datetime(),
     end: z.string().datetime()
-  }))
+  })).nonempty('É necessário informar pelo menos um horário.'),
 });
 
 export const voteSchema = z.object({

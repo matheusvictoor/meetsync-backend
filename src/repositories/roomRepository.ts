@@ -19,7 +19,7 @@ class RoomRepository {
           },
         },
       });
-      return room ? Result.ok(room as RoomResponse) : Result.fail(new Error('Sala nao encontrada.'));
+      return room ? Result.ok(room as RoomResponse) : Result.fail(new Error('Sala não encontrada.'));
     } catch (error) {
       return Result.fail(new Error('Erro ao buscar a sala.'));
     }
@@ -30,6 +30,8 @@ class RoomRepository {
       const roomData = await prisma.room.create({
         data: {
           endingAt: room.endingAt,
+          title: room.title, 
+          description: room.description || "", 
           Time: {
             createMany: {
               data: times.map(time => ({
@@ -73,9 +75,9 @@ class RoomRepository {
           room: true,  
         },
       });
-      return timeWithRoom?.room ? Result.ok(timeWithRoom.room) : Result.fail(new Error('Sala nao encontrada.')); 
+      return timeWithRoom?.room ? Result.ok(timeWithRoom.room) : Result.fail(new Error('Sala não encontrada.')); 
     } catch (error) {
-      return Result.fail(new Error('Erro ao buscar a sala pelo ID do horario.'))
+      return Result.fail(new Error('Erro ao buscar a sala pelo ID do horário.'));
     }  
   }
 }
