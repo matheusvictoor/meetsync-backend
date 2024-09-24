@@ -30,8 +30,8 @@ class RoomController{
 
     try {
       const roomData = roomSchema.parse(req.body);
-      const { endingAt, times } = roomData;
-      const room = await this.roomService.createRoom(endingAt, times);
+      const { endingAt, title, description, times } = roomData;
+      const room = await this.roomService.createRoom(endingAt, title, times, description);
   
       if(room.isFailure)
         return res.status(400).json({ error: room.error?.message });
