@@ -61,12 +61,30 @@ class RoomService {
   }
 
   async createRoom(endingAt: string, title: string, times: { date: string; start: string; end: string }[], description?: string) {
+    const now = new Date();
+    const endingAtDate = new Date(endingAt);
+    if (endingAtDate < now) {
+      return Result.fail(new Error('Criar sala já finalizada não é permitido'));
+    }
     
+    const hasDuplicate = times.some((time, index) => 
+      times.findIndex(t => 
+        t.date === time.date && 
+        t.start === time.start && 
+        t.end === time.end
+      ) !== index
+    );
+
+    if (hasDuplicate) {
+      return Result.fail(new Error('Horários duplicados não são permitidos.'));
+    }
+
     const room = new Room( 
-      new Date(endingAt),
+      endingAtDate,
       title,
       description
     );
+
     const timeObjects = times.map((time) => {
       return new Time(
         new Date(time.date), 
