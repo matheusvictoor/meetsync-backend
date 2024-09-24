@@ -19,5 +19,5 @@ export const roomSchema = z.object({
 
 export const voteSchema = z.object({
   userName: z.string(),
-  times: z.array(z.string().uuid())
+  times: z.array(z.string().uuid()).nonempty('É necessário informar pelo menos um horário.')
 });
