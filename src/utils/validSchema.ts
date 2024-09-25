@@ -6,8 +6,21 @@ export const userSchema = z.object({
   password: z.string().min(8, 'A senha deve ter no mínimo 8 caracteres').optional()
 });
 
+const isValidDate = (endingAt: string) => {
+  const date = new Date(endingAt);
+  
+  if (isNaN(date.getTime())) {
+    return false; 
+  }
+
+  const now = new Date();
+  return date >= now;
+};
+
 export const roomSchema = z.object({
-  endingAt: z.string().datetime({ message: 'A data de término é obrigatória e deve estar no formato correto.' }),
+  endingAt: z.string().refine((endingAt) => isValidDate(endingAt), {
+    message: "A data de término deve estar no formato correto e não pode ser uma data passada."
+  }),
   title: z.string().min(1, 'O título é obrigatório'),
   description: z.string().optional(), 
   times: z.array(z.object({
