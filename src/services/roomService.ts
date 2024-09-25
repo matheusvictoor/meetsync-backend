@@ -4,16 +4,15 @@ import { Vote } from '../models/vote';
 import RoomRepository from '../repositories/roomRepository';
 import { Result } from '../utils/result';
 
-type Report = {
-  times: (Time & { timeId: string })[];  
-  numVotes: number;
-}
-
 export interface RoomResponse extends Room {
   Time: (Time & {
     timeId: string;
     Vote: Vote[];
   })[];
+}
+
+export interface Report extends RoomResponse {
+  numVotes: number,
 }
 
 class RoomService {
@@ -23,7 +22,7 @@ class RoomService {
     this.roomRepository = new RoomRepository();
   }
 
-  async getRoom(roomId: string): Promise<Result<RoomResponse | Report>> {
+  async getRoom(roomId: string): Promise<Result<RoomResponse>> {
     const roomData = await this.roomRepository.getRoom(roomId);
 
     if (roomData.isFailure) {
@@ -41,19 +40,20 @@ class RoomService {
 
   generateReport(room: RoomResponse): Report {
     let mostVoted: Report = {
-      times: [],
-      numVotes: 0
+      title: room.title,
+      description: room.description,
+      endingAt: room.endingAt,
+      Time: [],
+      numVotes: 0,
     };
 
     room.Time.forEach((time) => {
       let votes = time.Vote.length;
       if (votes > mostVoted.numVotes) {
-        mostVoted = {
-          times: [time],
-          numVotes: votes
-        };
+        mostVoted.Time = [time];
+        mostVoted.numVotes = votes;
       } else if (votes === mostVoted.numVotes) {
-        mostVoted.times.push(time);
+        mostVoted.Time.push(time);
       }
     });
 
