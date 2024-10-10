@@ -12,7 +12,6 @@ services:
       NODE_ENV: development
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/node_modules
     command: npm run dev
 
   postgres:
@@ -41,10 +40,3 @@ services:
       - postgres
     volumes:
       - ./data/pgadmin:/var/lib/pgadmin
-     
-
-volumes:
-  pgdata:
-    driver: local
-  pgadmin:
-    driver: local
