@@ -21,6 +21,6 @@ jobs:
         ARGS: "-rltgoDzvO --delete"
         SOURCE: "./"
         REMOTE_HOST: "apimeetsync.ddns.net"
-        REMOTE_USER: "ubuntu"
+        REMOTE_USER: ${{ secrets.EC2_USER }}
         TARGET: "/home/meetsync-backend/"
 
