@@ -13,8 +13,8 @@ RUN npm install
 # copia o restante do codigo da aplicacao
 COPY . .
 
-# expoe a porta 3000
-EXPOSE 3000
+# expoe a porta 4000
+EXPOSE 4000
 
 # define o commando para inciar a aplicacao
 CMD ["npm", "run", "dev"]
