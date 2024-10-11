@@ -26,6 +26,8 @@ jobs:
     
     - name: Rebuild and restart Docker Compose
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key ${{ secrets.EC2_USER }}@apimeetsync.ddns.net "
+        echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/deploy_key
+        chmod 600 /tmp/deploy_key
+        ssh -o StrictHostKeyChecking=no -i /tmp/deploy_key ${{ secrets.EC2_USER }}@apimeetsync.ddns.net "
         cd /home/meetsync-backend && sudo docker-compose up -d --build" 
 
