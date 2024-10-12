@@ -14,20 +14,23 @@ jobs:
     - name: Checkout the files
       uses: actions/checkout@v3
 
-    - name: Copy files with SSH
+    - name: Copy files to EC2 with SSH
       uses: easingthemes/ssh-deploy@main
       env:
         SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-        ARGS: "-rltgoDzvO --delete"
+        ARGS: "-rltgoDzvO --delete --exclude 'node_modules'"
         SOURCE: "./"
         REMOTE_HOST: "apimeetsync.ddns.net"
         REMOTE_USER: ${{ secrets.EC2_USER }}
         TARGET: "/home/meetsync-backend/"
-    
+
     - name: Rebuild and restart Docker Compose
       run: |
         echo "${{ secrets.EC2_SSH_KEY }}" > /tmp/deploy_key
         chmod 600 /tmp/deploy_key
-        ssh -o StrictHostKeyChecking=no -i /tmp/deploy_key ${{ secrets.EC2_USER }}@apimeetsync.ddns.net "
-        cd /home/meetsync-backend && sudo docker-compose up -d --build" 
+        ssh -o StrictHostKeyChecking=no -i /tmp/deploy_key ${{ secrets.EC2_USER }}@apimeetsync.ddns.net << EOF
+        cd /home/meetsync-backend
+        sudo docker-compose up -d
+        EOF
+
 
