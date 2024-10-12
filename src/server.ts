@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(cors({
-  origin: 'http://localhost:4000', // Permitir apenas este domínio
+  origin: 'https://meet-sync-pearl.vercel.app', // Permitir apenas este domínio
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
   credentials: true // Se você precisa enviar cookies ou cabeçalhos de autenticação
@@ -20,7 +20,7 @@ app.use(cors({
 
 // Middleware para habilitar CORS
 app.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:4000');
+  res.header('Access-Control-Allow-Origin', 'https://meet-sync-pearl.vercel.app');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.sendStatus(204); // No Content
 });
