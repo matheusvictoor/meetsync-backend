@@ -2,14 +2,14 @@ import app from './app';
 import dotenv from "dotenv";
 import { errorMiddleware } from "./middlewares/error";
 import 'express-async-errors';
-import cors from 'cors';  // Importa o middleware cors
+import cors from 'cors';
 
 dotenv.config();
 
 
 // Middleware para habilitar CORS
 app.use(cors({
-  origin: 'https://meet-sync-six.vercel.app',
+  origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true 
@@ -17,7 +17,7 @@ app.use(cors({
 
 // Middleware para habilitar CORS em todas as rotas
 app.options('*', cors({
-  origin: 'https://meet-sync-six.vercel.app',
+  origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
