@@ -59,6 +59,7 @@ model Vote {
 model User_Room {
   userId String
   roomId String
+  email String?
 
   user User @relation(fields: [userId], references: [userId])
   room Room @relation(fields: [roomId], references: [roomId])
