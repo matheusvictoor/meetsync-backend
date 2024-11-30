@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { errorMiddleware } from "./middlewares/error";
 import 'express-async-errors';
 import cors from 'cors';
+import { sendResultsToAllParticipants } from './utils/sendResultEmail';
 
 dotenv.config();
 
@@ -27,6 +28,8 @@ app.options('*', cors({
 app.get('/', (req, res) => {
   res.send('API MeetSync Conectada!');
 });
+
+app.post('/email/:roomId', (req, res, next) => sendResultsToAllParticipants(req.params.roomId))
 
 // Middleware de tratamento de erros
 app.use(errorMiddleware);
