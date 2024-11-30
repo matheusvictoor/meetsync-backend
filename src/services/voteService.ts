@@ -12,9 +12,8 @@ class VoteService {
     this.roomRepository = new RoomRepository();
   }
 
-  async createVotes(userName: string, times: string[]) {
+  async createVotes(userName: string, times: string[], email?: string) {
     const roomData = await this.roomRepository.getRoomByTimeId(times[0]);
-
     if (roomData.isFailure) {
       return Result.fail(new Error('Sala indefinida'));
     }
@@ -25,6 +24,12 @@ class VoteService {
     if (room.endingAt < now) {
       return Result.fail(new Error('Tempo de votação encerrado'));
     }
+    if(email) {
+      const emailsSet = new Set (room.emails);
+      emailsSet.add(email)
+      room.emails = Array.from(emailsSet);
+      await this.roomRepository.updateRoom(room);
+    }
 
     const voteObjects = times.map((timeId) => {
       return new Vote(
@@ -32,7 +37,6 @@ class VoteService {
         timeId 
       );
     });
-
     return await this.voteRepository.createVotes(voteObjects);
   }
 }

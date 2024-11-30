@@ -65,6 +65,24 @@ class RoomRepository {
     }
   }
 
+  async updateRoom(room: Room): Promise<Result<void>> {
+    try {
+      await prisma.room.update({
+        where: {
+          roomId: room.roomId,
+        },
+        data: {
+          title: room.title,
+          description: room.description || "",
+          emails: room.emails || [],
+        },
+      });
+      return Result.ok();
+    } catch (error) {
+      return Result.fail(new Error('Erro ao atualizar a sala.'));
+    }
+  }
+
   async getRoomByTimeId(timeId: string): Promise<Result<Room>> {
     try {
       const timeWithRoom = await prisma.time.findUnique({

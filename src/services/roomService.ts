@@ -40,6 +40,7 @@ class RoomService {
 
   generateReport(room: RoomResponse): Report {
     let mostVoted: Report = {
+      roomId: room.roomId,
       title: room.title,
       description: room.description,
       endingAt: room.endingAt,

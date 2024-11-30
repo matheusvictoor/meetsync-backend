@@ -32,5 +32,6 @@ export const roomSchema = z.object({
 
 export const voteSchema = z.object({
   userName: z.string(),
+  email: z.string().email({ message: 'Insira um endereço de e-mail válido.'}).optional(),
   times: z.array(z.string().uuid()).nonempty('É necessário informar pelo menos um horário.')
 });

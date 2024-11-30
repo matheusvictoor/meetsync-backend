@@ -14,9 +14,9 @@ class VoteController{
 
     try {
       const voteData = voteSchema.parse(req.body);
-      const { userName, times } = voteData;
+      const { userName, email, times } = voteData;
   
-      const votes = await this.voteService.createVotes(userName, times);
+      const votes = await this.voteService.createVotes(userName, times, email);
   
       if(votes.isFailure) 
         return res.status(400).json({ error: votes.error?.message });
