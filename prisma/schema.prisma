@@ -1,7 +1,7 @@
 // arquivo para configuracao como banco de dados
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
 }
 
@@ -10,28 +10,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
- model User {
-  userId    String      @id @default(uuid())
+model User {
+  userId    String   @id @default(uuid())
   name      String
-  email     String      @unique
+  email     String   @unique
   password  String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   //Vote      Vote[]
   User_Room User_Room[]
 }
 
 model Room {
-  roomId     String    @id @default(uuid())
-  endingAt   DateTime
-  title      String
-  description String?  
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  roomId      String   @id @default(uuid())
+  endingAt    DateTime
+  title       String
+  description String?
+  emails      String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  Time       Time[]
-  User_Room  User_Room[]
+  Time      Time[]
+  User_Room User_Room[]
 }
 
 model Time {
@@ -50,16 +51,15 @@ model Vote {
   createdAt DateTime @default(now())
   userName  String
   timeId    String
-
-  @@unique([userName, timeId]) 
   //user User @relation(fields: [userId], references: [userId])
-  time Time @relation(fields: [timeId], references: [timeId], onDelete: Cascade)
+  time      Time     @relation(fields: [timeId], references: [timeId], onDelete: Cascade)
+
+  @@unique([userName, timeId])
 }
 
 model User_Room {
   userId String
   roomId String
-  email String?
 
   user User @relation(fields: [userId], references: [userId])
   room Room @relation(fields: [roomId], references: [roomId])
