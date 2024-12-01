@@ -3,6 +3,9 @@ import { Time } from '../models/time';
 import { Vote } from '../models/vote';
 import RoomRepository from '../repositories/roomRepository';
 import { Result } from '../utils/result';
+import { sendResultsToAllParticipants } from '../utils/sendResultEmail';
+
+const schedule = require('node-schedule');
 
 export interface RoomResponse extends Room {
   Time: (Time & {
@@ -94,7 +97,12 @@ class RoomService {
       );
     });
 
-    return await this.roomRepository.createRoom(room, timeObjects);
+    const roomResult = await this.roomRepository.createRoom(room, timeObjects);
+    const value = roomResult.getValue() as Room;
+    const j = schedule.scheduleJob(value.endingAt, function(){
+      sendResultsToAllParticipants(value.roomId);
+    });
+    return roomResult;
   }
 
   async deleteRoom(roomId: string): Promise<Result<void>> {
