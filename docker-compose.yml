@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     container_name: container_app
+    image: matheusvictoor/meetsync:1.1
     ports:
       - "4000:4000"
     depends_on:
@@ -12,7 +13,7 @@ services:
       NODE_ENV: production
     volumes:
       - .:/usr/src/app
-    command: npm run dev
+    command: sh -c "npx prisma migrate deploy && npm run dev" 
     restart: always
 
   postgres:

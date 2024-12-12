@@ -1,20 +1,17 @@
-# utilize uma imagem base do node bem menor
-FROM node:lts-alpine
+# Use a imagem base do Node.js
+FROM node:20
 
-# define o diretorio app como o diretorio de trabalho
+# Definir diretório de trabalho
 WORKDIR /usr/src/app
 
-# copia os arquivos de configuracao do npm
-COPY package*.json .
+# Copiar arquivos de configuração do npm
+COPY package*.json ./
 
-# instala dotas as dependecias de (producao e desenvolvimento)
+# Instalar dependências do npm
 RUN npm install
 
-# copia o restante do codigo da aplicacao
+# Copiar o restante dos arquivos da aplicação
 COPY . .
 
-# expoe a porta 4000
-EXPOSE 4000
-
-# define o commando para inciar a aplicacao
-CMD ["npm", "run", "dev"]
+# Comando para iniciar a aplicação
+CMD ["npm", "start"]
