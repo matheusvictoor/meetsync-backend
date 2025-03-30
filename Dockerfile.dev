@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 # Copiar arquivos de configuração do npm
 COPY package*.json ./
 
+# Força a instalação de todas as dependências (incluindo dev)
+ENV NODE_ENV=development
+
 # Instalar dependências do npm
 RUN npm install
 
@@ -14,4 +17,4 @@ RUN npm install
 COPY . .
 
 # Comando para iniciar a aplicação
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

@@ -9,11 +9,10 @@ services:
       - "4000:4000"
     depends_on:
       - postgres
-    environment:
-      NODE_ENV: production
     volumes:
       - .:/usr/src/app
-    command: sh -c "npx prisma migrate deploy && npm run dev" 
+      - /usr/src/app/node_modules
+    command: npm run dev:docker
     restart: always
 
   postgres:
@@ -28,17 +27,3 @@ services:
       - "5432:5432"
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
-
-  # pgadmin:
-  #   image: dpage/pgadmin4:latest
-  #   container_name: container_pgadmin
-  #   platform: linux/x86_64
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #   ports:
-  #     - "5050:80"
-  #   depends_on:
-  #     - postgres
-  #   volumes:
-  #     - ./data/pgadmin:/var/lib/pgadmin

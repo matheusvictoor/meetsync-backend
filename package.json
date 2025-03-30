@@ -6,7 +6,8 @@
     "dev": "nodemon --watch src --ext ts --exec \"ts-node src/server.ts\"",
     "start": "nodemon ./dist/server.js",
     "build": "tsc",
-    "postbuild": "prisma migrate deploy"
+    "postbuild": "prisma migrate deploy",
+    "dev:docker": "npx prisma generate && npx prisma migrate deploy && npm run dev"
   },
   "keywords": [],
   "author": "Iago Silva, Matheus Victor e Joab Cesar",
