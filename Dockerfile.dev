@@ -16,5 +16,12 @@ RUN npm install
 # Copiar o restante dos arquivos da aplicação
 COPY . .
 
+# Gera o Prisma Client durante o build (necessario para o render)*
+RUN npx prisma generate
+
+# Expõe a porta *
+EXPOSE 4000
+
 # Comando para iniciar a aplicação
-CMD ["npm", "run", "dev"]
+# CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run dev"]
