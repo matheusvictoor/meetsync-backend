@@ -7,21 +7,27 @@ import { sendResultsToAllParticipants } from './utils/sendResultEmail';
 
 dotenv.config();
 
-
 // Middleware para habilitar CORS
-app.use(cors({
-  origin: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true 
-}));
+const allowedOrigins = [
+  'http://localhost:5173', // Vite
+  'http://localhost:3000',
+  'https://meetsync.ddns.net',
+  'https://meetsync-backend.onrender.com'
+];
 
-// Middleware para habilitar CORS em todas as rotas
-app.options('*', cors({
-  origin: true,
+app.use(cors({
+  origin: function (origin, callback) {
+    // Permite requests sem Origin (como mobile/postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Rota simples para verificar se o servidor está funcionando
