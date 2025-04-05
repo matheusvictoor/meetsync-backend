@@ -10,13 +10,14 @@ dotenv.config();
 // Middleware para habilitar CORS
 const allowedOrigins = [
   'http://localhost:5173', // Vite
-  'http://localhost:3000',
-  'https://meetsync.ddns.net',
-  'https://meetsync-backend.onrender.com'
+  'http://localhost:3000', // React
+  'https://meetsync-pi.vercel.app'
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
+    console.log('Origin recebida:', origin);
+
     // Permite requests sem Origin (como mobile/postman)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
