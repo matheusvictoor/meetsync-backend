@@ -2,34 +2,21 @@ import app from './app';
 import dotenv from "dotenv";
 import { errorMiddleware } from "./middlewares/error";
 import 'express-async-errors';
-import cors from 'cors';
 import { sendResultsToAllParticipants } from './utils/sendResultEmail';
 
 dotenv.config();
 
-// Middleware para habilitar CORS
-const allowedOrigins = [
-  'http://localhost:5173', // Vite
-  'http://localhost:3000', // React
-  'https://meetsync-pi.vercel.app'
-];
+// Configuração do CORS
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://meetsync-pi.vercel.app");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
-app.use(cors({
-  origin: function (origin, callback) {
-    console.log('Origin recebida:', origin);
-
-    // Permite requests sem Origin (como mobile/postman)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  if (req.method === 'OPTIONS') {
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // Rota simples para verificar se o servidor está funcionando
 app.get('/', (req, res) => {
